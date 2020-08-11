@@ -17,4 +17,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/user/{id}', 'UserController@index')->name('user');
+
+Route::post('/comment/new_comment', 'CommentController@new')->name('new_comment');
+Route::post('/comment/new_comment/{id}', 'CommentController@new')->name('new_comment_id');
