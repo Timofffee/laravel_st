@@ -35,7 +35,7 @@
 <div id="reply_{{ $comment->id }}" class="hidden">
     @include('includes.newComment', ['parent_id' => $comment->id ])
 </div>
-<div style="margin-left: 55px">
+<div style="margin-left: 55px; margin-top: 15px">
     @foreach ($comment->childs as $child)
     <div class="media">
         <div class="media-left">
