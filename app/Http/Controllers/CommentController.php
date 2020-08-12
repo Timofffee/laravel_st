@@ -26,9 +26,11 @@ class CommentController extends Controller
         $comment->theme = $req->input('theme');
         $comment->message = $req->input('message');
         $comment->owner = Auth::id();
+        $comment->user_id = ($req->has('user_id')) ? $req->input('user_id') : Auth::id();
+        $comment->parent_id = ($req->has('parent_id')) ? $req->input('parent_id') : null;
 
         $comment->save();
         
-        return redirect()->route('home')->with('success', 'Message has been successfully sent');
+        return redirect()->back()->with('success', 'Message has been successfully sent');
     }
 }

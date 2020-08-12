@@ -15,11 +15,12 @@ class CreatePostsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('subject');
-            $table->string('theme');
-            $table->text('message');
-            $table->unsignedBigInteger('owner');
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->string('subject');  # Заголовок
+            $table->string('theme');    # Тема
+            $table->text('message');    # Текст комментария
+            $table->unsignedBigInteger('user_id');  # Где
+            $table->unsignedBigInteger('owner');    # Владелец комментария
+            $table->unsignedBigInteger('parent_id')->nullable(); # Родительский комментарий
             $table->timestamps();
         });
     }

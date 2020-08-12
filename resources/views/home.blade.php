@@ -27,6 +27,9 @@
                     @endif
                     <form action="{{ route('new_comment') }}" method="post">
                         {{ csrf_field() }}
+                        @if (isset($id))
+                            <input type="hidden" name="user_id" value="{{ $id }}">
+                        @endif
                         <div class="form-group">
                             <label for="subject">Заголовок</label>
                             <input class="form-control" type="text" name="subject" id="subject">
@@ -46,11 +49,15 @@
                     @foreach ($data as $comment)
                     <div class="media">
                         <div class="media-body">
+                            <small>
+                            <a href="/user/{{ $comment->owner }}"> {{ $comment->username }}</a> 
+                             | {{ $comment->created_at }}
+                            </small>
                             <h2 class="media-heading title">{{ $comment->subject }}</h2>
                             <h4 class="media-heading">{{ $comment->theme }}</h4>
                             <p class="comment">
                                 {{ $comment->message }}<br>
-                                <a href="#">reply</a>
+                                <a href="/comment/reply/{{ $comment->id }}">reply</a>
                             </p>
                         </div>
                     </div>
