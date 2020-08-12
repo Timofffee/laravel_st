@@ -23,7 +23,6 @@ class CommentController extends Controller
     {
         $comment = new Comment;
         $comment->subject = $req->input('subject');
-        $comment->theme = $req->input('theme');
         $comment->message = $req->input('message');
         $comment->owner = Auth::id();
         $comment->user_id = ($req->has('user_id')) ? $req->input('user_id') : Auth::id();
@@ -31,6 +30,20 @@ class CommentController extends Controller
 
         $comment->save();
         
-        return redirect()->back()->with('success', 'Message has been successfully sent');
+        return redirect()->back()->with('success', 'Comment has been successfully sent');
+    }
+
+    // public function index($id) {
+    //     return redirect()->back();
+    // }
+
+    public function delete($id) {
+        Comment::deleteComment($id);
+
+        return redirect()->back();
+    }
+
+    public function reply($id) {
+        return redirect()->back();
     }
 }

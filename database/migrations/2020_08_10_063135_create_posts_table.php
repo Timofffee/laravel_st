@@ -16,10 +16,10 @@ class CreatePostsTable extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('subject');  # Заголовок
-            $table->string('theme');    # Тема
             $table->text('message');    # Текст комментария
             $table->unsignedBigInteger('user_id');  # Где
             $table->unsignedBigInteger('owner');    # Владелец комментария
+            $table->boolean('deleted')->default(false); # Удалён ли комментарий? (Только для родителей)
             $table->unsignedBigInteger('parent_id')->nullable(); # Родительский комментарий
             $table->timestamps();
         });

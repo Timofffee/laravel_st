@@ -25,9 +25,8 @@ class newCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject' => 'required',
-            'theme' => 'required',
-            'message' => 'required'
+            'subject' => 'required | max: 100',
+            'message' => 'required | max: 2000'
         ];
     }
 }
