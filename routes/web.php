@@ -17,9 +17,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'UserController@index')->name('home');
+Route::get('home', 'UserController@index')->name('home')->middleware('auth');
+Route::get('user', function () {
+    return redirect('home');
+});
 
-Route::get('/user/{id}', 'UserController@index')->name('user');
+Route::get('user/{id}', 'UserController@index')->name('user');
 
-Route::post('/comment/new_comment', 'CommentController@new')->name('new_comment');
-Route::post('/comment/new_comment/{id}', 'CommentController@new')->name('new_comment_id');
+Route::post('comment/new_comment', 'CommentController@new')->name('new_comment')->middleware('auth');
+// Route::post('comment/new_comment/{id}', 'CommentController@new')->name('new_comment_id')->middleware('auth');

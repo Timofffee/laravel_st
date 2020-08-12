@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Comment extends Model
 {
@@ -26,5 +27,6 @@ class Comment extends Model
             $comment->childs = $q->where('comments.parent_id', '=', $comment->id)
                 ->get();
         }
+        return $data;
     }
 }
