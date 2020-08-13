@@ -18,6 +18,9 @@
         </small>
         @if ($comment->quote != null)
         <div class="blockquote" style="border-left: 2px solid #aaa; padding: 0.5rem 1rem; margin: 0.5rem">
+            @if ($comment->quote->deleted)
+            <small><h4 class="media-heading title text-gray">*/ COMMENT IS DELETED /*</h4></small>
+            @else
             <div class="media">
                 <div class="media-left">
                     <a href="/user/{{ $comment->quote->owner }}">
@@ -34,6 +37,7 @@
                     </p></small>
                 </div>
             </div>
+            @endif
         </div>
         @endif
         <h4 class="media-heading title">{{ $comment->subject }}</h4>
