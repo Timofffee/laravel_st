@@ -16,40 +16,18 @@
                         </div>
                 </div>
             </div>
-            @if (Auth::check())
             <div class="panel panel-default">
-                <div class="panel-heading">Новый комментарий</div>
+                <div class="panel-heading">Все комментарии</div>
 
                 <div class="panel-body">
-                    @include('includes.alert')
-                    @include('includes.newComment')
-                </div>
-            </div>
-            @endif
-            <div class="panel panel-default">
-                <div class="panel-heading">Комментарии</div>
-
-                <div class="panel-body">
+                @include('includes.alert')
                 @foreach ($data as $comment)
-                    @include ('includes.comment')
+                    @include ('includes.shortComment')
                 @endforeach
-                @if ($count > 5)
-                <div>
-                    <a href="" id="show_all_comments">Показать все комментарии</a>
-                </div>
-                @endif
                 ヽ(*・ω・)ﾉ
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    document.getElementById('show_all_comments').addEventListener("click", function (e) {
-        e.preventDefault();
-        let p = document.getElementById('show_all_comments').parentNode
-        p.parentNode.removeChild(p)
-    });
-</script>
 @endsection

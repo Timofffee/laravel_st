@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\newCommentRequest;
 use App\Comment;
+use App\User;
 
 class CommentController extends Controller
 {
@@ -33,9 +34,12 @@ class CommentController extends Controller
         return redirect()->back()->with('success', 'Comment has been successfully sent');
     }
 
-    // public function index($id) {
-    //     return redirect()->back();
-    // }
+    public function all($id = null) {
+        $user_id = ($id) ? $id : Auth::id();
+        $data = Comment::getUserComments($user_id);
+        $user = User::findOrFail($user_id);
+        return view('allComments', ['id' => $id, 'data' => $data, 'user' => $user]);
+    }
 
     public function delete($id) {
         Comment::deleteComment($id);

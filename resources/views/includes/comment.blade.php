@@ -14,14 +14,19 @@
             <small>
             <a href="/user/{{ $comment->owner }}"> {{ $comment->username }}</a> 
             | {{ $comment->created_at }}
-            @if (Auth::user()->id == $comment->owner || !isset($id))
-            | <a href="/comment/delete/{{ $comment->id }}">delete</a> 
+            @if (Auth::check())           
+                @if (Auth::user() && Auth::user()->id == $comment->owner || !isset($id))
+                    | <a href="/comment/delete/{{ $comment->id }}">delete</a> 
+                @endif
             @endif
             </small>
             <h4 class="media-heading title">{{ $comment->subject }}</h4>
             <p class="comment">
-                {{ $comment->message }}<br>
+                {{ $comment->message }}
+                @if (Auth::check())
+                <br>
                 <a href="" id="button_reply_{{ $comment->id }}">reply</a> 
+                @endif
             </p>
         @endif
     </div>
@@ -33,7 +38,7 @@
     });
 </script>
 <div id="reply_{{ $comment->id }}" class="hidden">
-    @include('includes.newComment', ['parent_id' => $comment->id ])
+    @include ('includes.newComment', ['parent_id' => $comment->id ])
 </div>
 <div style="margin-left: 55px; margin-top: 15px">
     @foreach ($comment->childs as $child)
@@ -47,8 +52,10 @@
             <small>
             <a href="/user/{{ $child->owner }}"> {{ $child->username }}</a> 
             | {{ $child->created_at }}
-            @if (Auth::user()->id == $child->owner || !isset($id))
-            | <a href="/comment/delete/{{ $child->id }}">delete</a> 
+            @if (Auth::check())
+                @if (Auth::user()->id == $child->owner || !isset($id))
+                | <a href="/comment/delete/{{ $child->id }}">delete</a> 
+                @endif
             @endif
             </small>
             <h4 class="media-heading title">{{ $child->subject }}</h4>

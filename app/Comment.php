@@ -19,11 +19,44 @@ class Comment extends Model
     //         ]);
     // }
     
-    static public function getComments($id, $count = -1, $offset = 0) {
-        $q = DB::table('comments')
+    static public function getUserComments($id) {
+        $comments = DB::table('comments')
             ->select(DB::raw('comments.*, users.name as username'))
-            ->leftJoin('users', 'comments.owner', '=', 'users.id');
-        $d = $q->where([
+            ->leftJoin('users', 'comments.owner', '=', 'users.id')
+            ->where('owner', '=', $id)
+            ->orderBy('created_at', 'desc')->get();
+        $data = [];
+        $parents = [];
+        foreach ($comments as $i => $comment) {
+            if ($comment->parent_id == null) {
+                $parents[$comment->id] = $comment;
+            }
+        }
+        $r = [];
+        foreach ($comments as $i => $comment) {
+            if ($comment->parent_id != null) {
+                if (array_key_exists($comment->parent_id, $parents)) {
+                    $comment->quote = $parents[$comment->parent_id];
+                } else {
+                    $comment->quote = DB::table('comments')
+                        ->select(DB::raw('comments.*, users.name as username'))
+                        ->leftJoin('users', 'comments.owner', '=', 'users.id')
+                        ->where('comments.id', '=', $comment->parent_id)
+                        ->first();
+                }
+            } else {
+                $comment->quote = null;
+            }
+            array_push($data, $comment);
+        }
+        return $data;
+    }
+
+    static public function getComments($id, $count = -1, $offset = 0) {
+        $d = DB::table('comments')
+            ->select(DB::raw('comments.*, users.name as username'))
+            ->leftJoin('users', 'comments.owner', '=', 'users.id')
+            ->where([
                 ['comments.user_id', '=', $id],
                 ['comments.parent_id', '=', null]
             ]);
@@ -47,8 +80,7 @@ class Comment extends Model
 
     static public function deleteComment($id) {
         $cc = DB::table('comments')
-            ->where('parent_id', '=', $id)
-            ->count();
+            ->where('parent_id', '=', $id)->count();
 
         $q = DB::table('comments')
             ->where('id', '=', $id)
@@ -56,15 +88,13 @@ class Comment extends Model
                 $query->where('owner', '=', Auth::id())
                       ->orWhere('user_id', '=', Auth::id());
             });
-        $p = $q->get()[0];
+        $p = $q->first();
         if ($cc != 0) {
             $q->update(['deleted' => true]);
         } else {
             $q->delete();
             if (DB::table('comments')
-                ->where('parent_id', '=', $p->parent_id)
-                ->count() == 0) 
-            {
+                ->where('parent_id', '=', $p->parent_id)->count() == 0) {
                 DB::table('comments')
                     ->where('id', '=', $p->parent_id)
                     ->where('deleted', '=', DB::raw(1))
