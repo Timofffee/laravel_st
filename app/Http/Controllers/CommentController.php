@@ -50,4 +50,17 @@ class CommentController extends Controller
     public function reply($id) {
         return redirect()->back();
     }
+
+    public function apiGetComments(Request $request) {
+        if (!$request->query('user_id')) {
+            return response()->json(['error'=>'Incorrect response']);
+        }
+        $id = $request->query('user_id');
+        $count = ($request->query('count')) ? $request->query('count') : -1;
+        $offset = ($request->query('offset')) ? $request->query('offset') : 0;
+        $data = Comment::getComments($id, $count, $offset);
+        $view_comment = view('api.getComments')->with('id', $id)->with('data', $data)->render();
+        
+        return response()->json(['success'=>true, 'data'=>$view_comment]);
+    }
 }

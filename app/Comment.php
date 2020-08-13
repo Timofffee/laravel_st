@@ -52,20 +52,17 @@ class Comment extends Model
         return $data;
     }
 
-    static public function getComments($id, $count = -1, $offset = 0) {
+    static public function getComments($id, $count = 100, $offset = 0) {
+        $count = ($count < 0) ? 100 : $count;
         $d = DB::table('comments')
             ->select(DB::raw('comments.*, users.name as username'))
             ->leftJoin('users', 'comments.owner', '=', 'users.id')
             ->where([
                 ['comments.user_id', '=', $id],
                 ['comments.parent_id', '=', null]
-            ]);
+            ])->take($count);
         if ($offset > 0) {
             $d = $d->skip($offset);
-        }
-
-        if ($count >= 0) {
-            $d = $d->take($count);
         }
         $data = $d->orderBy('created_at', 'desc')->get();
         foreach ($data as $i => $comment) {

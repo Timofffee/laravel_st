@@ -15,7 +15,7 @@
             <a href="/user/{{ $comment->owner }}"> {{ $comment->username }}</a> 
             | {{ $comment->created_at }}
             @if (Auth::check())           
-                @if (Auth::user() && Auth::user()->id == $comment->owner || !isset($id))
+                @if (Auth::user()->id == $comment->owner || !isset($id))
                     | <a href="/comment/delete/{{ $comment->id }}">delete</a> 
                 @endif
             @endif
@@ -31,6 +31,7 @@
         @endif
     </div>
 </div>
+@if (!$comment->deleted)
 <script>
     document.getElementById('button_reply_{{ $comment->id }}').addEventListener("click", function (e) {
         e.preventDefault();
@@ -40,6 +41,7 @@
 <div id="reply_{{ $comment->id }}" class="hidden">
     @include ('includes.newComment', ['parent_id' => $comment->id ])
 </div>
+@endif
 <div style="margin-left: 55px; margin-top: 15px">
     @foreach ($comment->childs as $child)
     <div class="media">

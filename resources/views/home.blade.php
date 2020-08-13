@@ -29,17 +29,17 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Комментарии</div>
 
-                <div class="panel-body">
-                @foreach ($data as $comment)
-                    @include ('includes.comment')
-                @endforeach
-                @if ($count > 5)
-                <div>
-                    <a href="" id="show_all_comments">Показать все комментарии</a>
+                <div class="panel-body" id="comments">
+                    @foreach ($data as $comment)
+                        @include ('includes.comment')
+                    @endforeach
+                    @if ($count > 5)
+                    <div>
+                        <a href="" id="show_all_comments">Показать все комментарии</a>
+                    </div>
+                    @endif
                 </div>
-                @endif
                 ヽ(*・ω・)ﾉ
-                </div>
             </div>
         </div>
     </div>
@@ -50,6 +50,13 @@
         e.preventDefault();
         let p = document.getElementById('show_all_comments').parentNode
         p.parentNode.removeChild(p)
+        $.ajax({
+            url: '/api/comment/getComments?user_id=1&offset=5',
+            data:'_token = <?php echo csrf_token() ?>',
+            success: function(data){
+                document.getElementById('comments').innerHTML += data.data;
+            }
+        });
     });
 </script>
 @endsection
