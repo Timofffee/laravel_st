@@ -14,6 +14,12 @@ class UserController extends Controller
         $user_id = ($id) ? $id : Auth::id();
         $data = Comment::getComments($user_id, 5);
         $user = User::findOrFail($user_id);
-        return view('home', ['id' => $id, 'data' => $data, 'count' => Comment::getCount($user_id), 'user' => $user]);
+        return view('home', ['data' => $data, 'count' => Comment::getCount($user_id), 'user' => $user]);
+    }
+
+    public function all($id = null)
+    {
+        $users = User::inRandomOrder()->get();
+        return view('welcome', ['users' => $users]);
     }
 }

@@ -9,9 +9,9 @@
     <div class="media-body">
         <small>
         <a href="/user/{{ $comment->owner }}"> {{ $comment->username }}</a> 
-        | {{ $comment->created_at }}
+        | <a href="/comment/{{ $comment->id }}">{{ $comment->created_at }}</a>
         @if (Auth::check())           
-            @if (Auth::user() && Auth::user()->id == $comment->owner || !isset($id))
+            @if (Auth::user() && Auth::user()->id == $comment->owner || !Auth::user()->id == $comment->user_id)
                 | <a href="/comment/delete/{{ $comment->id }}">delete</a> 
             @endif
         @endif
@@ -30,7 +30,7 @@
                 <div class="media-body">
                     <small>
                     <a href="/user/{{ $comment->quote->owner }}"> {{ $comment->quote->username }}</a> 
-                    | {{ $comment->quote->created_at }}
+                    | <a href="/comment/{{ $comment->quote->id }}">{{ $comment->quote->created_at }}</a>
                     <h4 class="media-heading title">{{ $comment->quote->subject }}</h4>
                     <p class="comment">
                         {{ $comment->quote->message }}

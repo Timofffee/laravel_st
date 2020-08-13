@@ -7,13 +7,13 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="media">
-                            <div class="media-left">
-                                <img src="https://api.adorable.io/avatars/80/{{ $user->name }}.png" class="media-object" style="width:80px; border-radius:50%;">
-                            </div>
-                            <div class="media-body">
-                                <h2 class="media-heading title">{{ $user->name }}</h2>
-                            </div>
+                        <div class="media-left">
+                            <img src="https://api.adorable.io/avatars/80/{{ $user->name }}.png" class="media-object" style="width:80px; border-radius:50%;">
                         </div>
+                        <div class="media-body">
+                            <h2 class="media-heading title">{{ $user->name }}</h2>
+                        </div>
+                    </div>
                 </div>
             </div>
             @if (Auth::check())

@@ -45,6 +45,9 @@ class Comment extends Model
                         ->first();
                 }
             } else {
+                if ($comment->deleted) {
+                    continue;
+                }
                 $comment->quote = null;
             }
             array_push($data, $comment);
@@ -73,6 +76,29 @@ class Comment extends Model
                 ->orderBy('created_at', 'desc')->get();
         }
         return $data;
+    }
+
+    static public function get($id) {
+        $c = DB::table('comments')
+            ->select(DB::raw('comments.*, users.name as username'))
+            ->leftJoin('users', 'comments.owner', '=', 'users.id')
+            ->where('comments.id', '=', $id)
+            ->first();
+        if ($c != null) {
+            if ($c->parent_id != null) {
+                
+            }
+            $c->childs = DB::table('comments')
+                ->select(DB::raw('comments.*, users.name as username'))
+                ->leftJoin('users', 'comments.owner', '=', 'users.id')
+                ->where('parent_id', '=', $id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+                
+            return $c;
+        }
+        return false;
+
     }
 
     static public function deleteComment($id) {

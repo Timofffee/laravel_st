@@ -38,16 +38,11 @@ class CommentController extends Controller
         $user_id = ($id) ? $id : Auth::id();
         $data = Comment::getUserComments($user_id);
         $user = User::findOrFail($user_id);
-        return view('allComments', ['id' => $id, 'data' => $data, 'user' => $user]);
+        return view('allComments', ['data' => $data, 'user' => $user]);
     }
 
     public function delete($id) {
         Comment::deleteComment($id);
-
-        return redirect()->back();
-    }
-
-    public function reply($id) {
         return redirect()->back();
     }
 
@@ -62,5 +57,11 @@ class CommentController extends Controller
         $view_comment = view('api.getComments')->with('id', $id)->with('data', $data)->render();
         
         return response()->json(['success'=>true, 'data'=>$view_comment]);
+    }
+
+    public function showComment($id) {
+        $comment = Comment::get($id);
+        $user_id = ($id) ? $id : Auth::id();
+        return view('oneComment', ['comment' => $comment]);
     }
 }
